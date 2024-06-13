@@ -1,5 +1,3 @@
-// Created by Vinay K
-
 window.onload = function () {
 
 
@@ -32,30 +30,22 @@ var pantaSound = new Audio("https://dl.dropboxusercontent.com/s/g956e4zuulplkxr/
 var diceRand = 0;
 var diceRandY = 0;
 
-var currMove = 0;
-var moves = 0;
+
 /*if (window.navigator.onLine) {
 onlineMode();
 } else {
 offlineMode();
 }*/
 
+var r1clickvar;
 
 var redHomeVal = 106;
 var yelHomeVal = 206;
-
-var isTargetFixed = false;
-var isGoingSafe = false;
-
-var target = null;
-var killer = null;
 
 var isEverythingFree = true;
 
 var hasExtraChanceY = false;
 var hasExtraChance = false;
-var fixed6count = 0;
-var highest = 0;
 
 class RedPiece {
     
@@ -101,6 +91,10 @@ class RedPiece {
       RedPiece.activeCount += 1;
       this.isAlive = true;
       this.currBlock = 27;
+      r1.piece.onclick = null;
+      r2.piece.onclick = null;
+      r3.piece.onclick = null;
+      r4.piece.onclick = null;
       //alert(RedPiece.activeCount);
       
       }
@@ -119,7 +113,6 @@ class RedPiece {
     
     if(this.currBlock >= 106)
     {
-    
         this.currBlock = redHomeVal;
         this.isReachedDestination = true;
         this.piece.style.height = "5vw";
@@ -129,15 +122,14 @@ class RedPiece {
         redHomeVal++;
         pantaSound.play();
         this.isMovable = false;
-        
-    }
-     document.getElementById(""+this.currBlock).append(this.piece);
+    } document.getElementById(""+this.currBlock).append(this.piece);
             if(this.currBlock == 52)
             {
                 this.currBlock = 0;
             }
             
-         //clearInterval(this.moveinterval,n*100);
+    
+    //clearInterval(this.moveinterval,n*100);
            }
         }
         
@@ -174,7 +166,7 @@ class RedPiece {
 
 class YellowPiece {
     
-    static activeCount = 0;
+    static aliveCount = 0;
     
     constructor(id)
     {
@@ -204,10 +196,6 @@ class YellowPiece {
       this.currBlock = 1;
       this.isAlive = true;
       YellowPiece.activeCount += 1;
-      r1.piece.onclick = null;
-      r2.piece.onclick = null;
-      r3.piece.onclick = null;
-      r4.piece.onclick = null;
       checkAdjustments();
     }
     
@@ -368,13 +356,12 @@ function toggled() {
     }
     
 }
-var error = document.getElementsByTagName("p");
 
-var strrr = error[error.length-1].innerHTML;
 
-if(!(strrr.includes("Vinay K")) || !(document.title.includes("Vinay K"))) {
-document.getElementById("finalnotep").innerHTML = "Error ! <br><br> Code copied & modified without Permission"; document.getElementById("finalnote").style.display = "block";
-}
+
+
+
+
 var ybox = document.getElementById("ydicebox");
 
 class YellowDice {
@@ -400,109 +387,12 @@ class YellowDice {
     else
         rarr[i].piece.style.zIndex = "15";
     }
-    
-    
-    if(!isTargetFixed) {
-    if(checkTarget())
-    {
-    moves = (target.currBlock - killer.currBlock);
-    //console.log("Target Fixed :"+target.id+" \n No.of moves : "+moves);
-    isTargetFixed = true;
-    if(moves >= 6)
-    {
-        currMove = 6;
-        moves -= 6;
-        //console.log("\n\n 6");
-    }
-    else {
-        currMove = moves;
-        moves -= moves;
-        //console.log("\n\n "+moves);
-    }
-    }
-    else {
-        isTargetFixed = false;
-    }
-    }
-    else {
-        if(moves != 0)
-        {
-            if(moves >= 6)
-            {
-              currMove = 6;
-              moves -= 6;
-              //console.log("\n\n 6")
-            }
-            else {
-                currMove = moves;
-                //console.log("\n\n "+moves)
-                moves -= moves;
-            }
-        }
-        else {
-            moves = 0;
-            isTargetFixed = false;
-            killer = null;
-            target = null;
-        }
-    }
-    
-    var safeMove = 0;
-    
-    if(!isGoingSafe) {
-        
-        if(checkSafe()) {
-            let yblk = safePiece.currBlock;
-            
-            isGoingSafe = true;
-            if(yblk > 3 && yblk < 9)
-            safeMove = 9-yblk;
-            else if(yblk > 8 && yblk < 14)
-            safeMove = 14-yblk;
-            else if(yblk > 16 && yblk < 22) 
-            safeMove = 22-yblk;
-            else if(yblk > 21 && yblk < 27) 
-            safeMove = 27-yblk;
-            else if(yblk > 29 && yblk < 35) 
-            safeMove = 35-yblk;
-            else if(yblk > 34 && yblk < 40) 
-            safeMove = 40-yblk;
-            else if(yblk > 42 && yblk < 48) 
-            safeMove = 48-yblk;
-        }
-        else {
-            isGoingSafe = false;
-        }
-        
-    }
-    
-    
-    if(isTargetFixed)
-    diceRandY = currMove;
-    else if(isGoingSafe)
-    diceRandY = safeMove;
-    else if(dice6hack)
+    if(dice6hack)
     diceRandY = 6;
     else if(dice1hack)
     diceRandY = 1;
-    else {
+    else
     diceRandY = Math.floor(Math.random()*7);
-    }
-    
-    if(diceRandY != 6)
-    {
-        if(fixed6count >= 7) {
-        diceRandY = 6;
-        fixed6count = 0; }
-        else {
-        fixed6count += 1; 
-        //console.log(fixed6count)
-        }
-    }
-    else {
-        fixed6count = 0;
-    }
-    
     //diceRandY = 6;
     this.diceValue = diceRandY;
     
@@ -568,23 +458,6 @@ class YellowDice {
         
         setTimeout(function () {
             
-            
-            
-            
-            
-            if(isTargetFixed) {
-                moveY(killer);
-            if(moves == 0) {
-              isTargetFixed = false;
-              killer = null;
-              target = null;
-              }
-            }
-            else if(isGoingSafe) {
-                moveY(safePiece);
-                isGoingSafe = false;
-            }
-            else {
             if(diceRandY == 6)
             {
             //alert("dice value 6");
@@ -659,7 +532,7 @@ class YellowDice {
             }
             
             
-            }
+            
             
             
         },500);
@@ -951,7 +824,7 @@ function moveY(r) {
     checkAdjustments();
     checkDeath(r);
     
-    if(diceRandY == 6 || hasExtraChanceY || isTargetFixed)
+    if(diceRandY == 6 || hasExtraChanceY)
     {
         hasExtraChanceY = false;
         yellowDice.roll();
@@ -996,7 +869,6 @@ function move(r) {
     {
     if(r.isMovable && !r.isMoving && !(r.steps+diceRand > 56))
     {
-    
     r1.piece.onclick = null;
     r2.piece.onclick = null;
     r3.piece.onclick = null;
@@ -1218,96 +1090,7 @@ function checkAdjustments() {
     // Upgrade needed
 }
 
-function checkTarget() {
-    
-    if(RedPiece.activeCount != 0)
-    {
-    
-    highest = 0;
-    
-    for(let i=0;i<4;i++)
-    {
-       for(let j=0;j<4;j++) {
-       
-       let yblk = yarr[i].currBlock;
-       let rblk = rarr[j].currBlock;
-       
-        if((yblk != 0 && rblk != 0 && rblk != 1 && rblk != 9 && rblk != 14 && rblk != 22 && rblk != 27 && rblk != 35 && rblk != 40 && rblk != 48) && (rblk > yblk && rblk < yblk+17)) {
-            if(rblk > highest)
-            {
-            highest = rblk;
-            target = rarr[j];
-            killer = yarr[i];
-            }
-        }
-        }
-    }
-    
-    if(target && killer)
-        return true;
-    else
-        return false;
-    }
-    else {
-        killer = null;
-        target = null;
-        return false;
-    }   
-}
 
-
-function checkDanger() {
-    
-    let best = 0;
-    
-    for(let i=0;i<4;i++)
-    {
-    
-    let yblk = yarr[i].currBlock;
-        if(yblk != 0 && ((yblk > 3 && yblk < 9) || (yblk > 8 && yblk < 14) || (yblk > 16 && yblk < 22) || (yblk > 21 && yblk < 27) || (yblk > 29 && yblk < 35) || (yblk > 34 && yblk < 40) || (yblk > 42 && yblk < 48) || (yblk > 47 && yblk < 53) )) {
-            
-            if(yarr[i].steps > best)
-            {
-                best = yarr[i].steps;
-                safePiece = yarr[i];
-            }
-            
-        }
-    }
-    if(best != 0)
-      return true;
-    else
-      return false;
-    
-    
-}
-
-
-
-
-function checkSafe() {
-    
-    let best = 0;
-    
-    for(let i=0;i<4;i++)
-    {
-    
-    let yblk = yarr[i].currBlock;
-        if(yblk != 0 && ((yblk > 3 && yblk < 9) || (yblk > 8 && yblk < 14) || (yblk > 16 && yblk < 22) || (yblk > 21 && yblk < 27) || (yblk > 29 && yblk < 35) || (yblk > 34 && yblk < 40) || (yblk > 42 && yblk < 48) )) {
-            
-            if(yarr[i].steps > best)
-            {
-                best = yarr[i].steps;
-                safePiece = yarr[i];
-            }
-            
-        }
-    }
-    if(best != 0)
-      return true;
-    else
-      return false;
-}
 
 
 
@@ -1352,7 +1135,7 @@ function checkWin(winner)
     }
     else {
         if((y1.isReachedDestination && y2.isReachedDestination && y3.isReachedDestination  && y4.isReachedDestination) || redAutoExit) {
-         document.getElementById("finalnotep").innerHTML = "Vinay Won"; document.getElementById("finalnote").style.display = "block";
+         document.getElementById("finalnotep").innerHTML = "Kamu Kalah"; document.getElementById("finalnote").style.display = "block";
       }
     }
 }
@@ -1478,43 +1261,14 @@ if(playerInactive)
 sim2 = setInterval(progressSim2, 150); 
 
 
-document.getElementById("restartgame").onclick = () => {
-    restartGame();
-}
-
-
-function restartGame() {
-    
-}
 
 
 
 
 
-
-
-//alert("Finally made a Killer AI 🖥️ \n\n If you win this and feel its too easy drop a comment i'll make it much difficult \n\n Dont forget to upvote 😅");
 
 
 }
 
 
 
-/*r1.piece.style.height = "15vw";
-r1.piece.style.width = "15vw";*/
-
-
-
-/*
-for(let i=0;i<places.length;i++)
-    {
-       places[i].style.border = "0.1px solid black"
-    }
-    
-    
-    var red1 = document.getElementById("red1");
-    var red2 = document.getElementById("red2");
-    red1.onclick = function () {
-        document.getElementById("red111").append(red1);
-    }
-*/
